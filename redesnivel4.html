@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafío Redes - Nivel 4</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #475569;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Desafío Redes</h1>
+    <h2>Nivel 4:</h2>
+    <div id="question-container">
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+    <div id="end-message" class="hidden">
+      <h2>¡Nivel superado, Agus! 🎉</h2>
+      <p>Puntaje final: <span id="score"></span>/30</p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+  { question: "¿Qué es el protocolo IP?", options: ["Un protocolo de comunicación para redes", "Un tipo de red de área local", "Un sistema operativo"], answer: 0, explanation: "El protocolo IP es responsable del direccionamiento y la entrega de paquetes en una red." },
+  { question: "¿Cuál es la función de un router en una red?", options: ["Conectar redes y enrutar el tráfico", "Conectar dispositivos dentro de la misma red", "Establecer la conexión a Internet"], answer: 0, explanation: "Un router conecta diferentes redes y enruta el tráfico entre ellas." },
+  { question: "¿Cuáles son las características principales de un router?", options: ["Encaminamiento de paquetes y gestión de tráfico", "Conexión de dispositivos dentro de la misma red", "Configuración de IPs estáticas"], answer: 0, explanation: "Un router gestiona el tráfico entre redes y realiza el encaminamiento de paquetes." },
+  { question: "¿Qué diferencia existe entre los dominios de colisión (switch) y los dominios de broadcast (router)?", options: ["Los switch gestionan dominios de colisión y los routers de broadcast", "Ambos gestionan dominios de broadcast", "Los routers gestionan dominios de colisión y los switches de broadcast"], answer: 0, explanation: "Los switches gestionan dominios de colisión, mientras que los routers gestionan dominios de broadcast." },
+  { question: "¿Qué es el direccionamiento IP?", options: ["Es un sistema de nombres de dominio", "Es el proceso de asignar direcciones a los dispositivos en una red", "Es el proceso de encriptación de datos"], answer: 1, explanation: "El direccionamiento IP asigna direcciones únicas a los dispositivos para que puedan comunicarse en una red." },
+  { question: "¿Qué es IANA y qué función cumple en el direccionamiento IP?", options: ["Es una organización que coordina la asignación de direcciones IP globalmente", "Es un servicio de traducción de nombres de dominio", "Es un sistema de enrutamiento para redes locales"], answer: 0, explanation: "IANA coordina la asignación global de direcciones IP y otros recursos de Internet." },
+  { question: "¿Cuál es la diferencia entre el direccionamiento Classful y Classless?", options: ["Classful usa una estructura fija, Classless es más flexible", "Classful no permite redes privadas, Classless sí", "Classful solo se usa en IPv6"], answer: 0, explanation: "Classful usa una estructura fija de direcciones, mientras que Classless permite una mayor flexibilidad en la asignación de direcciones IP." },
+  { question: "¿Qué es una máscara de subred y qué función cumple en el direccionamiento IP?", options: ["Define el rango de direcciones válidas en una red", "Es una dirección IP pública", "Es el protocolo para enrutar paquetes de datos"], answer: 0, explanation: "La máscara de subred determina qué parte de una dirección IP corresponde a la red y qué parte a los dispositivos dentro de esa red." },
+  { question: "¿Qué son las direcciones IP de red y de broadcast?", options: ["Direcciones reservadas para el envío de paquetes a todos los dispositivos", "Direcciones que identifican a los routers", "Direcciones usadas para la asignación de dispositivos estáticos"], answer: 0, explanation: "La dirección de red identifica la red, y la de broadcast se usa para enviar datos a todos los dispositivos dentro de esa red." },
+  { question: "¿Qué diferencia existe entre direcciones IP privadas y públicas?", options: ["Las privadas no pueden ser ruteadas por Internet, las públicas sí", "Las privadas solo se usan en redes inalámbricas", "Las privadas tienen un rango fijo"], answer: 0, explanation: "Las direcciones IP privadas son para uso local y no son accesibles desde Internet, mientras que las públicas son ruteables globalmente." },
+  { question: "¿Cómo se realiza la asignación de direcciones IP en una red?", options: ["Manual o automáticamente mediante DHCP", "Solo de forma manual", "A través de un sistema de nombres de dominio"], answer: 0, explanation: "Las direcciones IP se asignan manualmente o automáticamente mediante el protocolo DHCP." },
+  { question: "¿Qué son las direcciones IP públicas y qué función tienen las puertas de enlace?", options: ["Las direcciones IP públicas permiten la conexión con Internet y las puertas de enlace dirigen el tráfico", "Las direcciones IP públicas son para redes locales y las puertas de enlace no tienen función", "Las direcciones IP públicas no se usan en redes locales, solo las puertas de enlace"], answer: 0, explanation: "Las direcciones IP públicas permiten acceder a Internet, y las puertas de enlace enrutan el tráfico entre redes locales e Internet." },
+  { question: "¿Qué es el protocolo ICMP y cuál es su propósito?", options: ["Protocolo de control de errores y diagnóstico en redes", "Protocolo para la asignación de direcciones IP", "Protocolo de cifrado de datos"], answer: 0, explanation: "El protocolo ICMP se utiliza para enviar mensajes de error y diagnóstico, como los mensajes de 'host inalcanzable'." },
+  { question: "¿Cuál es la función del comando Tracert en redes?", options: ["Mostrar la ruta que sigue un paquete de datos a través de una red", "Asignar direcciones IP automáticamente", "Filtrar el tráfico de red"], answer: 0, explanation: "El comando Tracert muestra la ruta de los paquetes a través de la red y los tiempos de cada salto." },
+  { question: "¿En qué sistemas operativos se puede asignar manualmente una dirección IP?", options: ["Windows, Linux, MacOS y Android", "Solo en Linux y MacOS", "Solo en Windows y MacOS"], answer: 0, explanation: "Se puede asignar una dirección IP manualmente en Windows, Linux, MacOS y Android." },
+  { question: "¿Qué son las topologías de red y cómo se representan en diagramas?", options: ["Son las estructuras físicas y lógicas de una red", "Son los protocolos que se utilizan para el enrutamiento", "Son los tipos de cables utilizados en las redes"], answer: 0, explanation: "Las topologías representan cómo se conectan los dispositivos en una red, y se muestran mediante diagramas de red." },
+  { question: "¿Cómo se realiza la asignación de direccionamiento IP en Windows?", options: ["A través del panel de control en la configuración de red", "Mediante el comando 'ping'", "Por medio del software de administración de red"], answer: 0, explanation: "En Windows, la asignación de direcciones IP se hace desde el panel de control en la configuración de red." },
+  { question: "¿Cómo se realiza la asignación de direccionamiento IP en Linux?", options: ["Mediante el comando 'ifconfig' o 'ip'", "Desde la interfaz gráfica", "Usando el protocolo DHCP solo"], answer: 0, explanation: "En Linux, se pueden asignar direcciones IP manualmente con los comandos 'ifconfig' o 'ip'." },
+  { question: "¿Cómo se realiza la asignación de direccionamiento IP en MacOS?", options: ["Desde las preferencias del sistema en 'Red'", "Usando un script de Python", "Mediante la línea de comandos"], answer: 0, explanation: "En MacOS, la asignación de direcciones IP se realiza desde las preferencias del sistema en la sección de 'Red'." },
+  { question: "¿Cómo se realiza la asignación de direccionamiento IP en Android?", options: ["En la configuración de red dentro de los ajustes", "A través del software de administración de red", "No es posible asignar IP estática en Android"], answer: 0, explanation: "En Android, se puede asignar manualmente una dirección IP estática desde los ajustes de red." },
+  { question: "¿Cómo se diferencia el direccionamiento IP en una red local y en una red pública?", options: ["En la red local se usan direcciones privadas, mientras que en la pública se usan direcciones públicas", "No hay diferencia, son iguales", "Las redes locales no usan IPs"], answer: 0, explanation: "Las redes locales usan direcciones IP privadas, mientras que las redes públicas usan direcciones IP públicas." },
+  { question: "¿Qué es un router y cómo se configura para asignar direcciones IP?", options: ["Un router conecta redes y puede asignar direcciones IP con DHCP", "Un router solo enruta el tráfico, pero no asigna direcciones IP", "Un router asigna direcciones IP manualmente a cada dispositivo"], answer: 0, explanation: "El router puede configurar un servidor DHCP que asigna automáticamente direcciones IP a los dispositivos." },
+  { question: "¿Qué es un dominio de colisión en redes y cómo afecta el rendimiento?", options: ["Un dominio de colisión es cuando dos dispositivos intentan enviar datos al mismo tiempo, afectando la eficiencia", "Es el área de una red que no tiene cables", "Es una forma de optimizar el tráfico de red"], answer: 0, explanation: "En un dominio de colisión, el tráfico de datos se interrumpe cuando dos dispositivos intentan enviar datos simultáneamente, reduciendo la eficiencia." },
+  { question: "¿Cómo funciona el protocolo ICMP en la detección de errores de red?", options: ["Envía mensajes de error cuando un paquete no llega a su destino", "Realiza el enrutamiento de los paquetes", "Asigna direcciones IP automáticamente"], answer: 0, explanation: "ICMP envía mensajes de error para indicar problemas de comunicación, como la inalcanzabilidad de un host." },
+  { question: "¿Qué diferencia existe entre el comando Tracert y Traceroute?", options: ["Tracert es el comando de Windows, y Traceroute el de Linux", "Ambos comandos son exactamente iguales", "Tracert es más preciso que Traceroute"], answer: 0, explanation: "Tracert es el comando utilizado en sistemas Windows, mientras que Traceroute se usa en sistemas Linux para realizar el mismo análisis." },
+  { question: "¿Qué información puede proporcionar un comando Tracert sobre una conexión de red?", options: ["La ruta y los tiempos de respuesta de los paquetes", "La dirección IP pública del usuario", "El ancho de banda de la conexión"], answer: 0, explanation: "El comando Tracert muestra la ruta de los paquetes a través de la red y el tiempo que tarda en cada salto." },
+  { question: "¿Cómo se asigna una IP en una red pública y cuál es la función de la puerta de enlace?", options: ["La IP pública se asigna por el proveedor de Internet, y la puerta de enlace conecta la red local a Internet", "Se asigna manualmente por el usuario", "La puerta de enlace solo gestiona tráfico local"], answer: 0, explanation: "Las direcciones IP públicas las asigna el proveedor de Internet, y la puerta de enlace dirige el tráfico entre la red local y la red pública." },
+  { question: "¿Qué protocolo se utiliza para obtener automáticamente una dirección IP?", options: ["DHCP", "DNS", "FTP"], answer: 0, explanation: "El protocolo DHCP permite la asignación automática de direcciones IP a los dispositivos dentro de una red." },
+  { question: "¿Cuál es la utilidad de las máscaras de subred en el diseño de redes?", options: ["Permiten dividir una red en subredes más pequeñas", "Asignan direcciones IP públicas", "Son usadas para encriptar la información transmitida"], answer: 0, explanation: "Las máscaras de subred se utilizan para dividir una red grande en subredes más pequeñas, optimizando el uso del espacio de direcciones IP." },
+  { question: "¿Qué papel juega el protocolo ICMP en la gestión de redes y resolución de problemas?", options: ["Permite la transmisión de mensajes de control y diagnóstico", "Asigna direcciones IP de manera dinámica", "Gestiona la seguridad de los datos en la red"], answer: 0, explanation: "El protocolo ICMP se usa para enviar mensajes de control y diagnóstico, como los mensajes de error y la función de 'ping' para verificar la conectividad." }
+
+];
+
+    
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const endMessage = document.getElementById("end-message");
+    const scoreEl = document.getElementById("score");
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+
+      // Mezcla las opciones antes de mostrarlas
+      const shuffledOptions = [...q.options];
+      shuffleArray(shuffledOptions);
+
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "";
+
+      shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(idx, shuffledOptions, q);
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, shuffledOptions, q) {
+      const correctIndex = shuffledOptions.indexOf(q.options[q.answer]);
+
+      if (selected === correctIndex) {
+        score++;
+        feedbackEl.textContent = "✅ ¡Correcto! " + q.explanation;
+      } else {
+        feedbackEl.textContent = "❌ Incorrecto. " + q.explanation;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("question-container").classList.add("hidden");
+          endMessage.classList.remove("hidden");
+          scoreEl.textContent = score;
+        }
+      }, 5000); // Pausa de 5 segundos
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>

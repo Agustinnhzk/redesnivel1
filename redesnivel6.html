@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafío Redes - Nivel 6</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #475569;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Desafío Redes</h1>
+    <h2>Nivel 6</h2>
+    <div id="question-container">
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+    <div id="end-message" class="hidden">
+      <h2>¡Nivel superado, Agus! 🎉</h2>
+      <p>Puntaje final: <span id="score"></span>/30</p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué información proporciona un datasheet?", options: ["Características técnicas de un dispositivo", "Direcciones IP predeterminadas", "Instrucciones de cableado"], answer: 0, explanation: "Un datasheet describe las especificaciones técnicas y capacidades de un dispositivo." },
+      { question: "¿Qué es una topología de red?", options: ["La forma en que los dispositivos están interconectados", "La velocidad de conexión", "El tipo de cable usado"], answer: 0, explanation: "La topología define cómo se organizan y conectan los dispositivos en una red." },
+      { question: "¿Qué tecnología inalámbrica utiliza frecuencias de 2.4 GHz y 5 GHz?", options: ["Wi-Fi", "Bluetooth", "ZigBee"], answer: 0, explanation: "Wi-Fi utiliza frecuencias de 2.4 GHz y 5 GHz para la transmisión de datos." },
+      { question: "¿Qué es un router ISP?", options: ["Un router proporcionado por el proveedor de internet", "Un router usado solo en redes locales", "Un dispositivo que reemplaza al módem"], answer: 0, explanation: "El router ISP es entregado por el proveedor de internet para dar acceso a la red." },
+      { question: "¿Qué sucede al hacer un reset de fábrica a un router?", options: ["Se borran todas las configuraciones personalizadas", "Se actualiza el firmware", "Se mejora la velocidad de internet"], answer: 0, explanation: "El reset de fábrica borra todas las configuraciones personalizadas y vuelve a los valores predeterminados." },
+      { question: "¿Cuál es una medida básica de seguridad inalámbrica?", options: ["Configurar una contraseña fuerte en la red Wi-Fi", "Reducir el ancho de banda", "Apagar el router por la noche"], answer: 0, explanation: "Una contraseña fuerte es una de las principales medidas de seguridad inalámbrica." },
+      { question: "¿Qué se necesita para la primera conexión a un router nuevo?", options: ["Ingresar a su IP predeterminada mediante un navegador", "Instalar drivers especiales", "Llamar al proveedor de internet"], answer: 0, explanation: "Se accede a la IP predeterminada del router a través de un navegador para configurarlo." },
+      { question: "¿Qué es un asistente de configuración en un router?", options: ["Una guía paso a paso para la configuración inicial", "Una actualización automática", "Un software para formatear el router"], answer: 0, explanation: "El asistente de configuración guía al usuario en los pasos básicos para configurar el router." },
+      { question: "¿Qué función cumple el puerto WAN en un router?", options: ["Conectar el router a internet", "Conectar dispositivos locales", "Crear redes inalámbricas internas"], answer: 0, explanation: "El puerto WAN conecta el router con la red del proveedor de internet." },
+      { question: "¿Qué se conecta a los puertos LAN de un router?", options: ["Computadoras y dispositivos locales", "La línea de internet del ISP", "El cable de energía"], answer: 0, explanation: "Los puertos LAN se usan para conectar dispositivos locales como PCs, impresoras, etc." },
+      { question: "¿Qué configuración permite usar un servidor DNS personalizado en el router?", options: ["Configuración DNS", "Configuración WAN", "Configuración de puertos LAN"], answer: 0, explanation: "La configuración DNS permite asignar servidores DNS diferentes a los predeterminados." },
+      { question: "¿Qué parámetro inalámbrico afecta el nombre visible de la red?", options: ["SSID", "Dirección MAC", "Clave de red"], answer: 0, explanation: "El SSID es el nombre que identifica a la red Wi-Fi cuando los dispositivos la buscan." },
+      { question: "¿Qué parámetro inalámbrico mejora la seguridad de la red Wi-Fi?", options: ["Tipo de cifrado (WPA2 o WPA3)", "Ancho de canal", "Frecuencia de transmisión"], answer: 0, explanation: "Usar un cifrado fuerte como WPA2 o WPA3 es fundamental para proteger una red Wi-Fi." },
+      { question: "¿Qué es la conectividad inalámbrica?", options: ["La capacidad de conectar dispositivos sin cables", "El tipo de cable usado", "El tipo de antena instalada"], answer: 0, explanation: "La conectividad inalámbrica permite que los dispositivos se comuniquen sin necesidad de cables físicos." },
+      { question: "¿Qué modo usa un router para crear su propia red y repartir internet?", options: ["Modo Router", "Modo Access Point", "Modo Bridge"], answer: 0, explanation: "El modo Router permite al dispositivo gestionar su propia red y compartir la conexión a internet." },
+      { question: "¿Qué modo usa un dispositivo para ampliar una red existente?", options: ["Modo Access Point", "Modo Router", "Modo NAT"], answer: 0, explanation: "El modo Access Point conecta un dispositivo a una red ya existente para extender la cobertura inalámbrica." },
+      { question: "¿Qué frecuencia ofrece mayor alcance pero menor velocidad en Wi-Fi?", options: ["2.4 GHz", "5 GHz", "6 GHz"], answer: 0, explanation: "La banda de 2.4 GHz ofrece mayor alcance pero velocidades más bajas comparado con 5 GHz." },
+      { question: "¿Qué frecuencia ofrece mayor velocidad pero menor alcance en Wi-Fi?", options: ["5 GHz", "2.4 GHz", "900 MHz"], answer: 0, explanation: "La banda de 5 GHz proporciona mayores velocidades, pero tiene un alcance más reducido." },
+      { question: "¿Qué medida ayuda a proteger la red inalámbrica además de la contraseña?", options: ["Desactivar la difusión del SSID", "Reducir la velocidad de internet", "Usar puertos LAN en vez de Wi-Fi"], answer: 0, explanation: "Ocultar el SSID (nombre de red) es una capa adicional de seguridad, aunque no infalible." },
+      { question: "¿Cuál es la dirección IP más común para acceder a routers domésticos?", options: ["192.168.1.1", "10.0.0.1", "172.16.0.1"], answer: 0, explanation: "La IP 192.168.1.1 es una de las direcciones más utilizadas para configurar routers." },
+      { question: "¿Qué parámetro determina el canal de transmisión inalámbrica?", options: ["Configuración de canal", "Configuración de WAN", "Configuración de DHCP"], answer: 0, explanation: "El canal de transmisión se configura para optimizar la señal y evitar interferencias." },
+      { question: "¿Qué función tiene la autenticación en un router?", options: ["Permitir acceso solo a usuarios autorizados", "Mejorar la velocidad de conexión", "Multiplicar el ancho de banda"], answer: 0, explanation: "La autenticación asegura que solo usuarios autorizados puedan configurar o acceder a la red." },
+      { question: "¿Qué indica el parámetro DHCP en un router?", options: ["Asignación automática de IPs a los dispositivos", "Tipo de cifrado de seguridad", "Cantidad máxima de conexiones"], answer: 0, explanation: "DHCP permite asignar direcciones IP automáticamente a los dispositivos conectados." },
+      { question: "¿Qué puerto suele estar etiquetado en un router para la conexión a internet?", options: ["WAN", "LAN", "WLAN"], answer: 0, explanation: "El puerto WAN se utiliza para conectar el router al proveedor de internet." },
+      { question: "¿Qué se recomienda cambiar al configurar un router nuevo?", options: ["La contraseña de acceso y el SSID", "El color de los cables", "La dirección física del router"], answer: 0, explanation: "Cambiar la contraseña de acceso y el SSID ayuda a proteger la red desde el inicio." },
+      { question: "¿Qué ventaja tiene cambiar el canal de la red Wi-Fi?", options: ["Reducir interferencias de otras redes", "Mejorar la conexión por cable", "Bajar el consumo eléctrico del router"], answer: 0, explanation: "Cambiar el canal ayuda a evitar interferencias de otras redes cercanas, mejorando la señal." },
+      { question: "¿Qué sucede si dos routers cercanos usan el mismo canal Wi-Fi?", options: ["Puede haber interferencias y reducción de velocidad", "Aumenta la potencia de la señal", "La red se vuelve más segura"], answer: 0, explanation: "El uso del mismo canal puede provocar interferencias que afectan la velocidad y estabilidad." },
+      { question: "¿Qué parámetro determina el tipo de cifrado de una red inalámbrica?", options: ["Configuración de seguridad Wi-Fi", "Configuración de WAN", "Configuración de DNS"], answer: 0, explanation: "La configuración de seguridad Wi-Fi define el tipo de cifrado (WPA2, WPA3) que protege la red." },
+      { question: "¿Qué función tiene el firmware de un router?", options: ["Controlar su funcionamiento interno", "Asignar direcciones IP", "Aumentar el alcance inalámbrico"], answer: 0, explanation: "El firmware es el software interno que gestiona el comportamiento y funciones del router." },
+      { question: "¿Qué se debe hacer si olvidamos la contraseña de un router?", options: ["Resetearlo a valores de fábrica", "Apagarlo por un tiempo", "Actualizar el firmware"], answer: 0, explanation: "Resetear el router a valores de fábrica es la forma de recuperar el acceso si se olvidó la contraseña." }
+    ];
+
+    
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const endMessage = document.getElementById("end-message");
+    const scoreEl = document.getElementById("score");
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+
+      // Mezcla las opciones antes de mostrarlas
+      const shuffledOptions = [...q.options];
+      shuffleArray(shuffledOptions);
+
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "";
+
+      shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(idx, shuffledOptions, q);
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, shuffledOptions, q) {
+      const correctIndex = shuffledOptions.indexOf(q.options[q.answer]);
+
+      if (selected === correctIndex) {
+        score++;
+        feedbackEl.textContent = "✅ ¡Correcto! " + q.explanation;
+      } else {
+        feedbackEl.textContent = "❌ Incorrecto. " + q.explanation;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("question-container").classList.add("hidden");
+          endMessage.classList.remove("hidden");
+          scoreEl.textContent = score;
+        }
+      }, 5000); // Pausa de 5 segundos
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>

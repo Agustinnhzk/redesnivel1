@@ -59,7 +59,7 @@
 <body>
   <div class="game-container">
     <h1>Desafío Redes</h1>
-    <h2>Nivel 2: Fundamentos de Redes</h2>
+    <h2>Nivel 2:</h2>
     <div id="question-container">
       <p class="question" id="question"></p>
       <div class="choices" id="choices"></div>
@@ -72,36 +72,37 @@
   </div>
 
   <script>
-    const questions = [
-      { question: "¿Qué es un switch administrable?", options: ["Un switch configurable por software", "Un router especializado", "Un dispositivo de firewall"], answer: 0, explanation: "Un switch administrable permite configuraciones avanzadas como VLANs y QoS." },
-      { question: "¿Qué es una VLAN?", options: ["Una red lógica dentro de una red física", "Un tipo de firewall", "Una dirección IP estática"], answer: 0, explanation: "Una VLAN segmenta redes a nivel lógico para mejorar organización y seguridad." },
-      { question: "¿Qué protocolo se encarga de traducir direcciones IP a direcciones MAC?", options: ["ARP", "DNS", "HTTP"], answer: 0, explanation: "El protocolo ARP asocia una IP con una dirección MAC." },
-      { question: "¿Qué es un SSID en redes inalámbricas?", options: ["El nombre visible de una red Wi-Fi", "Una clave de red", "Un protocolo de comunicación"], answer: 0, explanation: "El SSID es el nombre que ves cuando buscas redes Wi-Fi disponibles." },
-      { question: "¿Qué frecuencia utilizan las redes Wi-Fi tradicionales?", options: ["2.4 GHz y 5 GHz", "3.6 GHz y 6 GHz", "900 MHz y 2.4 GHz"], answer: 0, explanation: "Las redes Wi-Fi más comunes operan en 2.4 GHz y 5 GHz." },
-      { question: "¿Qué es un DHCP Server?", options: ["Un servidor que asigna IP automáticamente", "Un servidor web", "Un cortafuegos"], answer: 0, explanation: "El servidor DHCP asigna direcciones IP dinámicas a los dispositivos." },
-      { question: "¿Qué puerto utiliza HTTP?", options: ["80", "443", "21"], answer: 0, explanation: "HTTP utiliza el puerto 80 para transmitir páginas web en texto plano." },
-      { question: "¿Qué puerto utiliza HTTPS?", options: ["443", "80", "22"], answer: 0, explanation: "HTTPS utiliza el puerto 443 para transmitir datos cifrados." },
-      { question: "¿Qué puerto utiliza FTP?", options: ["21", "25", "110"], answer: 0, explanation: "FTP (Protocolo de Transferencia de Archivos) utiliza el puerto 21." },
-      { question: "¿Qué comando muestra la configuración IP en Windows?", options: ["ipconfig", "ping", "tracert"], answer: 0, explanation: "El comando ipconfig muestra detalles de la red en Windows." },
-      { question: "¿Qué comando verifica la conectividad con otro dispositivo?", options: ["ping", "ftp", "netstat"], answer: 0, explanation: "Ping permite comprobar si otro dispositivo responde a paquetes ICMP." },
-      { question: "¿Qué comando rastrea la ruta de paquetes?", options: ["tracert", "ipconfig", "ssh"], answer: 0, explanation: "Tracert (traceroute) muestra los saltos que toma un paquete hasta el destino." },
-      { question: "¿Qué protocolo de red ofrece servicios de correo electrónico?", options: ["SMTP", "HTTP", "SNMP"], answer: 0, explanation: "SMTP permite enviar correos electrónicos en redes." },
-      { question: "¿Qué protocolo se encarga de la supervisión de dispositivos de red?", options: ["SNMP", "SSH", "FTP"], answer: 0, explanation: "SNMP se usa para monitorear y administrar dispositivos de red." },
-      { question: "¿Qué protocolo se usa para acceder a dispositivos de forma segura?", options: ["SSH", "Telnet", "FTP"], answer: 0, explanation: "SSH permite acceso seguro a través de conexiones cifradas." },
-      { question: "¿Qué es NAT?", options: ["Traducción de direcciones de red", "Un protocolo de autenticación", "Un error de red"], answer: 0, explanation: "NAT permite que varios dispositivos compartan una única IP pública." },
-      { question: "¿Qué es una IP pública?", options: ["Una dirección visible en Internet", "Una IP solo para redes locales", "Un identificador de hardware"], answer: 0, explanation: "Una IP pública identifica tu dispositivo en Internet." },
-      { question: "¿Qué es una IP privada?", options: ["Una dirección reservada para redes internas", "Una dirección visible en Internet", "Un tipo de protocolo"], answer: 0, explanation: "Las IPs privadas son usadas dentro de redes locales y no son accesibles desde Internet." },
-      { question: "¿Qué herramienta permite analizar tráfico de red?", options: ["Wireshark", "Photoshop", "VLC"], answer: 0, explanation: "Wireshark permite capturar y analizar tráfico de red en tiempo real." },
-      { question: "¿Qué protocolo traduce direcciones IP dinámicas a nombres de dominio?", options: ["DDNS", "DNS", "DHCP"], answer: 0, explanation: "DDNS actualiza dinámicamente las entradas de DNS cuando cambia una IP." },
-      { question: "¿Qué es una DMZ en una red?", options: ["Zona desmilitarizada, separa internet de la red interna", "Una red inalámbrica privada", "Un tipo de switch"], answer: 0, explanation: "La DMZ aloja servicios públicos mientras protege la red interna." },
-      { question: "¿Qué es un servidor proxy?", options: ["Un intermediario entre el cliente y el servidor final", "Un servidor de correo", "Un router dedicado"], answer: 0, explanation: "El proxy actúa como intermediario para filtrar o cachear solicitudes." },
-      { question: "¿Qué función tiene el cable de fibra óptica?", options: ["Transmitir datos a alta velocidad mediante luz", "Transmitir energía eléctrica", "Conectar dispositivos Bluetooth"], answer: 0, explanation: "La fibra óptica transmite datos usando pulsos de luz a alta velocidad." },
-      { question: "¿Qué es un backbone de red?", options: ["La infraestructura principal que conecta diferentes redes", "Un tipo de protocolo", "Un firewall central"], answer: 0, explanation: "El backbone es el núcleo que interconecta las partes principales de una red." },
-      { question: "¿Qué tecnología usa multiplexación por división de tiempo?", options: ["TDM", "FDM", "CDMA"], answer: 0, explanation: "TDM (Time Division Multiplexing) asigna diferentes tiempos de transmisión a cada canal." },
-      { question: "¿Qué es un túnel VPN?", options: ["Una conexión segura a través de Internet", "Una nueva red física", "Un protocolo de transferencia de archivos"], answer: 0, explanation: "La VPN crea un 'túnel' cifrado para proteger los datos transmitidos." },
-      { question: "¿Qué capa del modelo OSI corresponde al cableado?", options: ["Capa física", "Capa de red", "Capa de transporte"], answer: 0, explanation: "La capa física trata sobre el cableado y los medios de transmisión físicos." },
-      { question: "¿Qué es el jitter en redes?", options: ["Variación en el retardo de paquetes", "Pérdida total de paquetes", "Una interrupción eléctrica"], answer: 0, explanation: "El jitter mide las variaciones en el tiempo de llegada de los paquetes." },
-      { question: "¿Qué protocolo se utiliza para sincronizar relojes en redes?", options: ["NTP", "TCP", "FTP"], answer: 0, explanation: "NTP (Network Time Protocol) sincroniza la hora de los dispositivos en red." }
+   const questions = [
+    { question: "¿Qué es un switch administrable?", options: ["Un switch configurable por software", "Un router especializado", "Un dispositivo de firewall"], answer: 0, explanation: "Un switch administrable permite configuraciones avanzadas como VLANs y QoS." },
+    { question: "¿Qué es una VLAN?", options: ["Una red lógica dentro de una red física", "Un tipo de firewall", "Una dirección IP estática"], answer: 0, explanation: "Una VLAN segmenta redes a nivel lógico para mejorar organización y seguridad." },
+    { question: "¿Qué protocolo se encarga de traducir direcciones IP a direcciones MAC?", options: ["ARP", "DNS", "HTTP"], answer: 0, explanation: "El protocolo ARP asocia una IP con una dirección MAC." },
+    { question: "¿Qué es un SSID en redes inalámbricas?", options: ["El nombre visible de una red Wi-Fi", "Una clave de red", "Un protocolo de comunicación"], answer: 0, explanation: "El SSID es el nombre que ves cuando buscas redes Wi-Fi disponibles." },
+    { question: "¿Qué frecuencia utilizan las redes Wi-Fi tradicionales?", options: ["2.4 GHz y 5 GHz", "3.6 GHz y 6 GHz", "900 MHz y 2.4 GHz"], answer: 0, explanation: "Las redes Wi-Fi más comunes operan en 2.4 GHz y 5 GHz." },
+    { question: "¿Qué es un DHCP Server?", options: ["Un servidor que asigna IP automáticamente", "Un servidor web", "Un cortafuegos"], answer: 0, explanation: "El servidor DHCP asigna direcciones IP dinámicas a los dispositivos." },
+    { question: "¿Qué puerto utiliza HTTP?", options: ["80", "443", "21"], answer: 0, explanation: "HTTP utiliza el puerto 80 para transmitir páginas web en texto plano." },
+    { question: "¿Qué puerto utiliza HTTPS?", options: ["443", "80", "22"], answer: 0, explanation: "HTTPS utiliza el puerto 443 para transmitir datos cifrados." },
+    { question: "¿Qué puerto utiliza FTP?", options: ["21", "25", "110"], answer: 0, explanation: "FTP (Protocolo de Transferencia de Archivos) utiliza el puerto 21." },
+    { question: "¿Qué comando muestra la configuración IP en Windows?", options: ["ipconfig", "ping", "tracert"], answer: 0, explanation: "El comando ipconfig muestra detalles de la red en Windows." },
+    { question: "¿Qué comando verifica la conectividad con otro dispositivo?", options: ["ping", "ftp", "netstat"], answer: 0, explanation: "Ping permite comprobar si otro dispositivo responde a paquetes ICMP." },
+    { question: "¿Qué comando rastrea la ruta de paquetes?", options: ["tracert", "ipconfig", "ssh"], answer: 0, explanation: "Tracert (traceroute) muestra los saltos que toma un paquete hasta el destino." },
+    { question: "¿Qué protocolo de red ofrece servicios de correo electrónico?", options: ["SMTP", "HTTP", "SNMP"], answer: 0, explanation: "SMTP permite enviar correos electrónicos en redes." },
+    { question: "¿Qué protocolo se encarga de la supervisión de dispositivos de red?", options: ["SNMP", "SSH", "FTP"], answer: 0, explanation: "SNMP se usa para monitorear y administrar dispositivos de red." },
+    { question: "¿Qué protocolo se usa para acceder a dispositivos de forma segura?", options: ["SSH", "Telnet", "FTP"], answer: 0, explanation: "SSH permite acceso seguro a través de conexiones cifradas." },
+    { question: "¿Qué es NAT?", options: ["Traducción de direcciones de red", "Un protocolo de autenticación", "Un error de red"], answer: 0, explanation: "NAT permite que varios dispositivos compartan una única IP pública." },
+    { question: "¿Qué es una IP pública?", options: ["Una dirección visible en Internet", "Una IP solo para redes locales", "Un identificador de hardware"], answer: 0, explanation: "Una IP pública identifica tu dispositivo en Internet." },
+    { question: "¿Qué es una IP privada?", options: ["Una dirección reservada para redes internas", "Una dirección visible en Internet", "Un tipo de protocolo"], answer: 0, explanation: "Las IPs privadas son usadas dentro de redes locales y no son accesibles desde Internet." },
+    { question: "¿Qué herramienta permite analizar tráfico de red?", options: ["Wireshark", "Photoshop", "VLC"], answer: 0, explanation: "Wireshark permite capturar y analizar tráfico de red en tiempo real." },
+    { question: "¿Qué protocolo traduce direcciones IP dinámicas a nombres de dominio?", options: ["DDNS", "DNS", "DHCP"], answer: 0, explanation: "DDNS actualiza dinámicamente las entradas de DNS cuando cambia una IP." },
+    { question: "¿Qué es una DMZ en una red?", options: ["Zona desmilitarizada, separa internet de la red interna", "Una red inalámbrica privada", "Un tipo de switch"], answer: 0, explanation: "La DMZ aloja servicios públicos mientras protege la red interna." },
+    { question: "¿Qué es un servidor proxy?", options: ["Un intermediario entre el cliente y el servidor final", "Un servidor de correo", "Un router dedicado"], answer: 0, explanation: "El proxy actúa como intermediario para filtrar o cachear solicitudes." },
+    { question: "¿Qué función tiene el cable de fibra óptica?", options: ["Transmitir datos a alta velocidad mediante luz", "Transmitir energía eléctrica", "Conectar dispositivos Bluetooth"], answer: 0, explanation: "La fibra óptica transmite datos usando pulsos de luz a alta velocidad." },
+    { question: "¿Qué es un backbone de red?", options: ["La infraestructura principal que conecta diferentes redes", "Un tipo de protocolo", "Un firewall central"], answer: 0, explanation: "El backbone es el núcleo que interconecta las partes principales de una red." },
+    { question: "¿Qué tecnología usa multiplexación por división de tiempo?", options: ["TDM", "FDM", "CDMA"], answer: 0, explanation: "TDM (Time Division Multiplexing) asigna diferentes tiempos de transmisión a cada canal." },
+    { question: "¿Qué es un túnel VPN?", options: ["Una conexión segura a través de Internet", "Una nueva red física", "Un protocolo de transferencia de archivos"], answer: 0, explanation: "La VPN crea un 'túnel' cifrado para proteger los datos transmitidos." },
+    { question: "¿Qué capa del modelo OSI corresponde al cableado?", options: ["Capa física", "Capa de red", "Capa de transporte"], answer: 0, explanation: "La capa física trata sobre el cableado y los medios de transmisión físicos." },
+    { question: "¿Qué es el jitter en redes?", options: ["Variación en el retardo de paquetes", "Pérdida total de paquetes", "Una interrupción eléctrica"], answer: 0, explanation: "El jitter mide las variaciones en el tiempo de llegada de los paquetes." },
+    { question: "¿Qué protocolo se utiliza para sincronizar relojes en redes?", options: ["NTP", "TCP", "FTP"], answer: 0, explanation: "NTP (Network Time Protocol) sincroniza la hora de los dispositivos en red." },
+    { question: "¿Qué es un ataque DDoS?", options: ["Un ataque distribuido que busca saturar un servicio", "Un protocolo de autenticación", "Una técnica de encriptación"], answer: 0, explanation: "Un ataque DDoS (Distributed Denial of Service) utiliza múltiples dispositivos para sobrecargar un servicio y hacerlo inaccesible." },
     ];
 
     let currentQuestion = 0;

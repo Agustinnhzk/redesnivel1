@@ -59,7 +59,7 @@
 <body>
   <div class="game-container">
     <h1>Desafío Redes</h1>
-    <h2>Nivel 3: Protocolos y Seguridad Básica</h2>
+    <h2>Nivel 3:</h2>
     <div id="question-container">
       <p class="question" id="question"></p>
       <div class="choices" id="choices"></div>
@@ -70,41 +70,39 @@
       <p>Puntaje final: <span id="score"></span>/30</p>
     </div>
   </div>
-
   <script>
-    const questions = [
-      { question: "¿Qué protocolo se utiliza para enviar correos electrónicos?", options: ["SMTP", "FTP", "HTTP"], answer: 0, explanation: "SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para el envío de correos electrónicos." },
-      { question: "¿Qué protocolo es responsable de la traducción de nombres de dominio?", options: ["DNS", "DHCP", "TCP"], answer: 0, explanation: "DNS traduce nombres de dominio como www.example.com en direcciones IP." },
-      { question: "¿Cuál de estos es un protocolo seguro para navegación web?", options: ["HTTPS", "HTTP", "FTP"], answer: 0, explanation: "HTTPS añade una capa de seguridad mediante cifrado SSL/TLS a HTTP." },
-      { question: "¿Qué hace el protocolo FTP?", options: ["Transfiere archivos", "Envía correos electrónicos", "Asigna direcciones IP"], answer: 0, explanation: "FTP (File Transfer Protocol) se utiliza para transferir archivos a través de una red." },
-      { question: "¿Qué significa SSL?", options: ["Secure Sockets Layer", "Security Server Link", "Software Security Level"], answer: 0, explanation: "SSL (Secure Sockets Layer) es un protocolo de cifrado para comunicaciones seguras." },
-      { question: "¿Qué protocolo reemplaza a SSL en la actualidad?", options: ["TLS", "FTP", "SMTP"], answer: 0, explanation: "TLS (Transport Layer Security) es la versión más moderna y segura que reemplaza a SSL." },
-      { question: "¿Qué protocolo se usa en redes inalámbricas seguras?", options: ["WPA2", "HTTP", "FTP"], answer: 0, explanation: "WPA2 (Wi-Fi Protected Access 2) es un estándar de seguridad para redes inalámbricas." },
-      { question: "¿Qué es un ataque de phishing?", options: ["Suplantación de identidad para robar datos", "Un virus que daña hardware", "Una actualización de seguridad"], answer: 0, explanation: "El phishing engaña a las personas para que entreguen información personal confidencial." },
-      { question: "¿Qué dispositivo ayuda a proteger una red de accesos no autorizados?", options: ["Firewall", "Switch", "Router"], answer: 0, explanation: "El firewall filtra y controla el tráfico para proteger contra accesos no autorizados." },
-      { question: "¿Qué capa OSI maneja la comunicación de extremo a extremo?", options: ["Transporte", "Red", "Física"], answer: 0, explanation: "La capa de transporte asegura la comunicación confiable de extremo a extremo." },
-      { question: "¿Qué protocolo utiliza el puerto 443?", options: ["HTTPS", "HTTP", "FTP"], answer: 0, explanation: "HTTPS usa el puerto 443 para la navegación web segura." },
-      { question: "¿Qué significa VPN?", options: ["Red Privada Virtual", "Verificación de Protocolo de Nombres", "Vinculación de Puertos de Nodo"], answer: 0, explanation: "Una VPN crea un túnel seguro a través de una red pública como Internet." },
-      { question: "¿Qué significa la sigla IPsec?", options: ["Internet Protocol Security", "Internet Password Secure", "Internal Protocol Section"], answer: 0, explanation: "IPsec es un conjunto de protocolos que aseguran comunicaciones IP cifradas." },
-      { question: "¿Cuál de estos NO es un método de autenticación?", options: ["Switching", "Contraseña", "Biometría"], answer: 0, explanation: "Switching no es un método de autenticación, es una técnica de redes." },
-      { question: "¿Qué es sniffing en redes?", options: ["Capturar tráfico de red", "Actualizar servidores", "Desfragmentar discos"], answer: 0, explanation: "Sniffing consiste en interceptar y analizar paquetes de datos en una red." },
-      { question: "¿Qué protocolo permite conexión remota segura?", options: ["SSH", "Telnet", "HTTP"], answer: 0, explanation: "SSH (Secure Shell) proporciona acceso remoto seguro a sistemas." },
-      { question: "¿Qué protocolo obsoleto debería evitarse para conexiones remotas?", options: ["Telnet", "SSH", "HTTPS"], answer: 0, explanation: "Telnet es inseguro porque transmite datos en texto plano." },
-      { question: "¿Qué es una zona desmilitarizada (DMZ) en redes?", options: ["Área intermedia entre red interna y externa", "Un servidor DNS", "Un tipo de firewall"], answer: 0, explanation: "Una DMZ es una subred que separa los servicios accesibles públicamente de la red interna segura." },
-      { question: "¿Qué protocolo resuelve la dirección MAC a partir de una IP?", options: ["ARP", "RARP", "ICMP"], answer: 0, explanation: "ARP (Address Resolution Protocol) se encarga de encontrar la dirección MAC correspondiente a una IP." },
-      { question: "¿Qué protocolo reporta errores en la entrega de paquetes?", options: ["ICMP", "TCP", "UDP"], answer: 0, explanation: "ICMP (Internet Control Message Protocol) informa errores y diagnósticos en la red." },
-      { question: "¿Qué herramienta usa ICMP para verificar conectividad?", options: ["Ping", "Traceroute", "FTP"], answer: 0, explanation: "Ping usa ICMP para comprobar la disponibilidad de otro dispositivo en red." },
-      { question: "¿Qué significa que un puerto esté 'abierto'?", options: ["Está disponible para aceptar conexiones", "Está dañado", "Está cifrado"], answer: 0, explanation: "Un puerto abierto permite que servicios específicos reciban conexiones entrantes." },
-      { question: "¿Qué protocolo asigna IP automáticamente?", options: ["DHCP", "DNS", "SMTP"], answer: 0, explanation: "DHCP (Dynamic Host Configuration Protocol) asigna IPs automáticamente a los dispositivos." },
-      { question: "¿Qué significa cifrado de extremo a extremo?", options: ["Que solo emisor y receptor pueden leer el contenido", "Que los datos viajan más rápido", "Que la red es inalámbrica"], answer: 0, explanation: "El cifrado de extremo a extremo garantiza que solo las partes involucradas puedan acceder al contenido." },
-      { question: "¿Qué es un exploit en seguridad informática?", options: ["Un software que aprovecha vulnerabilidades", "Un firewall avanzado", "Un programa antivirus"], answer: 0, explanation: "Un exploit es un programa o código que se aprovecha de una vulnerabilidad de seguridad." },
-      { question: "¿Qué significa HTTPS?", options: ["HTTP Secure", "HyperText Transfer Protocol Simple", "Hyper Transport System"], answer: 0, explanation: "HTTPS es la versión segura de HTTP usando cifrado TLS." },
-      { question: "¿Qué protocolo utiliza SSH para cifrado?", options: ["RSA", "FTP", "TCP"], answer: 0, explanation: "SSH puede usar RSA como método de cifrado para autenticar la conexión." },
-      { question: "¿Qué tipo de ataque satura un servicio para hacerlo inaccesible?", options: ["Ataque de denegación de servicio (DoS)", "Phishing", "Sniffing"], answer: 0, explanation: "Un ataque DoS intenta hacer que un servicio o red no esté disponible para usuarios legítimos." },
-      { question: "¿Qué protocolo permite conocer la ruta que siguen los paquetes?", options: ["Traceroute", "Ping", "FTP"], answer: 0, explanation: "Traceroute permite rastrear el camino que siguen los paquetes hasta su destino final." },
-      { question: "¿Qué elemento de seguridad ayuda a detectar accesos no autorizados?", options: ["Sistema de detección de intrusos (IDS)", "Switch", "Cable UTP"], answer: 0, explanation: "Un IDS analiza el tráfico en busca de patrones que indiquen accesos no autorizados o ataques." }
-    ];
-
+  const questions = [
+  { question: "¿Cuál es la principal función de un switch?", options: ["Conectar dispositivos en una red local", "Proporcionar acceso a internet", "Asignar direcciones IP"], answer: 0, explanation: "El switch conecta dispositivos dentro de una red local (LAN) para que puedan comunicarse entre sí." },
+  { question: "¿Qué velocidad corresponde a Fast Ethernet?", options: ["100 Mbps", "1 Gbps", "10 Mbps"], answer: 0, explanation: "Fast Ethernet opera a una velocidad de 100 Mbps." },
+  { question: "¿Qué velocidad alcanza Gigabit Ethernet?", options: ["1000 Mbps", "100 Mbps", "10 Mbps"], answer: 0, explanation: "Gigabit Ethernet ofrece velocidades de 1000 Mbps (1 Gbps)." },
+  { question: "¿Qué puerto estándar se utiliza para conectar cables Ethernet en un switch?", options: ["RJ-45", "USB", "HDMI"], answer: 0, explanation: "El puerto estándar para conexiones Ethernet es RJ-45." },
+  { question: "¿Qué hace un switch de red?", options: ["Filtra y reenvía paquetes de datos a dispositivos específicos", "Asigna direcciones IP automáticamente", "Encripta las comunicaciones"], answer: 0, explanation: "El switch filtra y reenvía datos hacia el dispositivo correcto usando la dirección MAC." },
+  { question: "¿Cuál es una ventaja de los switches administrables?", options: ["Permiten configurar VLANs y priorizar tráfico", "Son más económicos", "Tienen menor latencia"], answer: 0, explanation: "Los switches administrables permiten configuraciones avanzadas como VLANs, QoS y monitoreo." },
+  { question: "¿Qué es una VLAN?", options: ["Una red virtual dentro de una red física", "Un tipo de cable", "Un protocolo de seguridad"], answer: 0, explanation: "Una VLAN (Virtual LAN) permite segmentar una red física en redes lógicas independientes." },
+  { question: "¿Qué es un switch no administrable?", options: ["Un switch que funciona automáticamente sin configuraciones avanzadas", "Un switch que requiere configuración manual", "Un switch que se utiliza solo en redes inalámbricas"], answer: 0, explanation: "Un switch no administrable no requiere configuraciones: solo conectar y usar." },
+  { question: "¿Qué tipo de switch es ideal para una empresa que necesita separar tráfico de diferentes departamentos?", options: ["Switch administrable", "Switch no administrable", "Hub"], answer: 0, explanation: "Un switch administrable permite crear VLANs para separar el tráfico de distintos departamentos." },
+  { question: "¿Qué capa del modelo OSI trabaja un switch?", options: ["Capa 2 (Enlace de Datos)", "Capa 3 (Red)", "Capa 1 (Física)"], answer: 0, explanation: "El switch trabaja principalmente en la Capa 2 del modelo OSI, gestionando direcciones MAC." },
+  { question: "¿Qué diseño de red facilita la escalabilidad y organización?", options: ["Diseño jerárquico", "Diseño plano", "Diseño mixto"], answer: 0, explanation: "El diseño jerárquico organiza la red en capas, facilitando su crecimiento y mantenimiento." },
+  { question: "¿Qué capa del diseño jerárquico es responsable de conectar múltiples switches de acceso?", options: ["Capa de distribución", "Capa de acceso", "Capa de núcleo"], answer: 0, explanation: "La capa de distribución conecta los switches de acceso y aplica políticas de red." },
+  { question: "¿Qué capa del diseño jerárquico proporciona acceso directo a los dispositivos finales?", options: ["Capa de acceso", "Capa de núcleo", "Capa de distribución"], answer: 0, explanation: "La capa de acceso conecta directamente a usuarios y dispositivos finales a la red." },
+  { question: "¿Qué capa del diseño jerárquico se encarga de la alta velocidad y la eficiencia en la transmisión?", options: ["Capa de núcleo", "Capa de acceso", "Capa de distribución"], answer: 0, explanation: "La capa de núcleo proporciona una transmisión de datos rápida y confiable entre distintas partes de la red." },
+  { question: "¿Qué característica tiene un diseño de red plano?", options: ["Todos los dispositivos se conectan directamente entre sí", "La red está dividida en capas", "Mayor control de tráfico"], answer: 0, explanation: "En un diseño de red plano, todos los dispositivos se interconectan sin jerarquías definidas." },
+  { question: "¿Cuál es una desventaja de un diseño de red plano?", options: ["Difícil de escalar y administrar", "Mayor velocidad de transmisión", "Mayor redundancia"], answer: 0, explanation: "Las redes planas son más difíciles de escalar y administrar a medida que crecen." },
+  { question: "¿Qué ventaja ofrece un diseño de red jerárquico?", options: ["Facilita la escalabilidad y la segmentación", "Requiere menos dispositivos", "Reduce el costo inicial"], answer: 0, explanation: "El diseño jerárquico facilita el crecimiento de la red y su segmentación lógica." },
+  { question: "¿Qué tipo de dispositivo se suele encontrar en la capa de núcleo?", options: ["Switches de alta velocidad", "Firewalls domésticos", "Access Points"], answer: 0, explanation: "En la capa de núcleo se colocan switches de alto rendimiento que gestionan el tráfico de toda la red." },
+  { question: "¿Qué función tiene un Access Point en una red?", options: ["Proporciona conectividad inalámbrica a los dispositivos", "Conecta redes diferentes", "Asigna direcciones IP"], answer: 0, explanation: "Un Access Point permite que dispositivos inalámbricos se conecten a una red cableada." },
+  { question: "¿Qué significa PoE en switches?", options: ["Power over Ethernet", "Protocol over Ethernet", "Processing over Ethernet"], answer: 0, explanation: "PoE (Power over Ethernet) permite transmitir energía eléctrica junto con datos a través de un cable Ethernet." },
+  { question: "¿Cuál es una ventaja de utilizar switches con PoE?", options: ["Alimentan dispositivos como cámaras IP sin necesidad de cables eléctricos adicionales", "Aumentan el ancho de banda disponible", "Reducen el consumo de datos"], answer: 0, explanation: "Los switches PoE permiten alimentar dispositivos como cámaras y Access Points directamente por el cable de red." },
+  { question: "¿Qué característica tiene un switch de capa 3?", options: ["Puede realizar funciones de enrutamiento además de switching", "Solo puede reenviar paquetes basado en direcciones MAC", "Opera únicamente a nivel físico"], answer: 0, explanation: "Un switch de capa 3 combina funciones de switching y enrutamiento, operando en la capa de red." },
+  { question: "¿Qué hace un switch de capa 2 tradicional?", options: ["Reenvía datos basado en direcciones MAC", "Reenvía datos basado en direcciones IP", "Asigna direcciones IP"], answer: 0, explanation: "El switch de capa 2 reenvía tramas basándose en las direcciones MAC de origen y destino." },
+  { question: "¿Qué es la redundancia en el diseño de redes?", options: ["La inclusión de rutas o dispositivos alternativos para mejorar la disponibilidad", "La reducción de costos eliminando dispositivos", "La simplificación del cableado"], answer: 0, explanation: "La redundancia busca aumentar la disponibilidad de la red, proporcionando rutas alternativas en caso de fallos." },
+  { question: "¿Qué protocolo se usa frecuentemente para evitar bucles de red?", options: ["STP (Spanning Tree Protocol)", "DHCP", "ARP"], answer: 0, explanation: "STP previene bucles en redes que utilizan múltiples caminos redundantes entre switches." },
+  { question: "¿Qué tipo de switch necesitarías si requieres administración remota?", options: ["Switch administrable", "Switch no administrable", "Hub"], answer: 0, explanation: "Un switch administrable permite ser gestionado remotamente para configuraciones avanzadas." },
+  { question: "¿Qué define un uplink en un switch?", options: ["Un puerto para conectar a otro switch o router", "Una conexión inalámbrica", "Un método de cifrado"], answer: 0, explanation: "El uplink es un puerto destinado a interconectar switches o conectar un switch a un router." },
+  { question: "¿Qué mejora se obtiene usando VLANs?", options: ["Segmentación del tráfico de red", "Mayor velocidad de internet", "Menor necesidad de switches"], answer: 0, explanation: "Las VLANs permiten dividir una red en subredes lógicas, mejorando seguridad y gestión del tráfico." },
+  { question: "¿Qué representa la sigla STP en redes?", options: ["Spanning Tree Protocol", "Standard Transmission Protocol", "Secure Transfer Process"], answer: 0, explanation: "STP (Spanning Tree Protocol) se utiliza para evitar bucles en redes de switches." },
+  { question: "¿Qué protocolo permite el acceso a páginas web?", options: ["HTTP", "FFTP", "SMTP"], answer: 0, explanation: "HTTP (HyperText Transfer Protocol) permite la transferencia de información para acceder a páginas web" },
+  ];
     let currentQuestion = 0;
     let score = 0;
 

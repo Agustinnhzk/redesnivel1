@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafío Redes - Nivel 5</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #475569;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Desafío Redes</h1>
+    <h2>Nivel 5</h2>
+    <div id="question-container">
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+    <div id="end-message" class="hidden">
+      <h2>¡Nivel superado, Agus! 🎉</h2>
+      <p>Puntaje final: <span id="score"></span>/30</p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué función cumple el protocolo NAT?", options: ["Traduce direcciones IP privadas a públicas", "Asigna direcciones IP dinámicas", "Encripta datos en tránsito"], answer: 0, explanation: "NAT (Network Address Translation) traduce direcciones IP privadas a públicas para acceso a internet." },
+      { question: "¿Qué protocolo permite múltiples conexiones usando un mismo IP público?", options: ["PAT", "TCP", "UDP"], answer: 0, explanation: "PAT (Port Address Translation) permite que varios dispositivos compartan una única IP pública diferenciándolos por puertos." },
+      { question: "¿Cuál es una característica principal de TCP?", options: ["Conexión orientada y confiable", "Transmisión rápida sin conexión", "Uso exclusivo en redes inalámbricas"], answer: 0, explanation: "TCP (Transmission Control Protocol) garantiza la entrega ordenada y confiable de los datos." },
+      { question: "¿Qué característica tiene el protocolo UDP?", options: ["No garantiza la entrega de los datos", "Establece conexiones seguras", "Corrige errores automáticamente"], answer: 0, explanation: "UDP (User Datagram Protocol) no garantiza entrega ni orden, pero es más rápido y ligero." },
+      { question: "¿Qué identifica el puerto lógico en un encabezado TCP?", options: ["La aplicación origen y destino", "La dirección IP", "El tamaño del paquete"], answer: 0, explanation: "El puerto lógico en TCP indica qué aplicación genera o recibe la comunicación." },
+      { question: "¿Qué incluye el encabezado UDP?", options: ["Puerto de origen y destino", "Control de errores y ventana de congestión", "Ajuste de flujo de datos"], answer: 0, explanation: "El encabezado UDP contiene información básica como puertos de origen y destino, longitud y suma de verificación." },
+      { question: "¿Qué función tienen los puertos lógicos?", options: ["Identificar aplicaciones o servicios específicos", "Conectar dispositivos físicamente", "Asignar direcciones IP"], answer: 0, explanation: "Los puertos lógicos permiten dirigir los datos a las aplicaciones correctas dentro de un dispositivo." },
+      { question: "¿Qué rango abarcan los puertos bien conocidos?", options: ["0 a 1023", "1024 a 49151", "49152 a 65535"], answer: 0, explanation: "Los puertos bien conocidos van del 0 al 1023 y son utilizados por servicios estándar como HTTP o FTP." },
+      { question: "¿Qué protocolo usa el puerto 80?", options: ["HTTP", "FTP", "SMTP"], answer: 0, explanation: "HTTP utiliza el puerto 80 para la transferencia de páginas web." },
+      { question: "¿Qué protocolo de aplicación gestiona la asignación automática de IP?", options: ["DHCP", "DNS", "HTTP"], answer: 0, explanation: "DHCP (Dynamic Host Configuration Protocol) asigna direcciones IP automáticamente a los dispositivos." },
+      { question: "¿Qué hace el protocolo DNS?", options: ["Traduce nombres de dominio a direcciones IP", "Asigna IP automáticamente", "Encripta datos de navegación"], answer: 0, explanation: "DNS (Domain Name System) convierte nombres de dominio legibles en direcciones IP." },
+      { question: "¿Qué servicio proporciona seguridad en la transferencia de datos en internet?", options: ["SSL/TLS", "HTTP", "DHCP"], answer: 0, explanation: "SSL/TLS proporcionan seguridad cifrando las comunicaciones entre cliente y servidor." },
+      { question: "¿Cuál es una función de TLS?", options: ["Cifrar las comunicaciones", "Asignar IPs dinámicamente", "Resolver nombres de dominio"], answer: 0, explanation: "TLS (Transport Layer Security) cifra los datos para proteger la comunicación." },
+      { question: "¿Qué hace un certificado digital en una conexión HTTPS?", options: ["Verifica la identidad del servidor", "Asigna la dirección IP", "Encripta archivos adjuntos"], answer: 0, explanation: "Un certificado digital asegura que el servidor es auténtico y permite establecer una conexión segura." },
+      { question: "¿Qué protocolo se utiliza para navegar de forma segura en la web?", options: ["HTTPS", "FTP", "DHCP"], answer: 0, explanation: "HTTPS (HTTP Secure) usa SSL/TLS para proteger la comunicación entre el navegador y el servidor." },
+      { question: "¿Qué diferencia a HTTPS de HTTP?", options: ["HTTPS cifra los datos", "HTTPS es más rápido", "HTTPS usa menos recursos"], answer: 0, explanation: "HTTPS cifra los datos transmitidos para proteger la privacidad del usuario." },
+      { question: "¿Qué protocolo se usa para transferir archivos de forma simple sin autenticación?", options: ["TFTP", "FTP", "SFTP"], answer: 0, explanation: "TFTP (Trivial File Transfer Protocol) permite transferencias de archivos simples, sin autenticación avanzada." },
+      { question: "¿Qué protocolo permite la transferencia segura de archivos usando cifrado?", options: ["SFTP", "TFTP", "HTTP"], answer: 0, explanation: "SFTP (SSH File Transfer Protocol) transfiere archivos de manera segura utilizando cifrado SSH." },
+      { question: "¿Qué característica tiene FTP?", options: ["Permite transferir archivos mediante autenticación", "Cifra toda la transferencia", "Utiliza solo la red interna"], answer: 0, explanation: "FTP (File Transfer Protocol) permite la transferencia de archivos y puede requerir autenticación de usuario." },
+      { question: "¿Qué protocolo es FTP sobre SSL/TLS?", options: ["FTPS", "SFTP", "TFTP"], answer: 0, explanation: "FTPS (FTP Secure) agrega seguridad SSL/TLS al protocolo FTP." },
+      { question: "¿Qué protocolo se usa para enviar correos electrónicos?", options: ["SMTP", "POP3", "IMAP"], answer: 0, explanation: "SMTP (Simple Mail Transfer Protocol) se utiliza para el envío de correos electrónicos." },
+      { question: "¿Qué protocolo permite descargar correos manteniéndolos en el servidor?", options: ["IMAP", "POP3", "SMTP"], answer: 0, explanation: "IMAP (Internet Message Access Protocol) permite acceder a los correos en el servidor sin descargarlos." },
+      { question: "¿Qué protocolo descarga los correos y los elimina del servidor?", options: ["POP3", "IMAP", "SMTP"], answer: 0, explanation: "POP3 (Post Office Protocol v3) descarga los correos y generalmente los elimina del servidor." },
+      { question: "¿Qué puerto usa SMTP típicamente?", options: ["25", "80", "443"], answer: 0, explanation: "SMTP utiliza normalmente el puerto 25 para la transmisión de correos." },
+      { question: "¿Qué puerto usa IMAP normalmente?", options: ["143", "110", "25"], answer: 0, explanation: "IMAP utiliza típicamente el puerto 143 para acceder a los correos almacenados en el servidor." },
+      { question: "¿Qué puerto usa POP3?", options: ["110", "443", "21"], answer: 0, explanation: "POP3 utiliza el puerto 110 para descargar correos electrónicos desde el servidor." },
+      { question: "¿Qué protocolo utiliza el puerto 443?", options: ["HTTPS", "HTTP", "FTP"], answer: 0, explanation: "HTTPS utiliza el puerto 443 para establecer conexiones web seguras." },
+      { question: "¿Qué servicio permite obtener automáticamente información de red como IP, puerta de enlace y DNS?", options: ["DHCP", "DNS", "FTP"], answer: 0, explanation: "DHCP asigna automáticamente información de red como IP, máscara de subred, puerta de enlace y DNS." },
+      { question: "¿Qué protocolo resuelve nombres de dominio como www.example.com?", options: ["DNS", "HTTP", "FTP"], answer: 0, explanation: "DNS traduce nombres de dominio legibles por humanos a direcciones IP." },
+      { question: "¿Qué capa del modelo OSI operan la mayoría de los protocolos de aplicación como HTTP, FTP y SMTP?", options: ["Capa 7 (Aplicación)", "Capa 4 (Transporte)", "Capa 3 (Red)"], answer: 0, explanation: "HTTP, FTP, SMTP y otros protocolos de aplicación trabajan en la Capa 7 del modelo OSI." }
+    ];
+   
+    
+
+    
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const endMessage = document.getElementById("end-message");
+    const scoreEl = document.getElementById("score");
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+
+      // Mezcla las opciones antes de mostrarlas
+      const shuffledOptions = [...q.options];
+      shuffleArray(shuffledOptions);
+
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "";
+
+      shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(idx, shuffledOptions, q);
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, shuffledOptions, q) {
+      const correctIndex = shuffledOptions.indexOf(q.options[q.answer]);
+
+      if (selected === correctIndex) {
+        score++;
+        feedbackEl.textContent = "✅ ¡Correcto! " + q.explanation;
+      } else {
+        feedbackEl.textContent = "❌ Incorrecto. " + q.explanation;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("question-container").classList.add("hidden");
+          endMessage.classList.remove("hidden");
+          scoreEl.textContent = score;
+        }
+      }, 5000); // Pausa de 5 segundos
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
