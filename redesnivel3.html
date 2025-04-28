@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafío Redes - Nivel 3</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #475569;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Desafío Redes</h1>
+    <h2>Nivel 3: Protocolos y Seguridad Básica</h2>
+    <div id="question-container">
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+    <div id="end-message" class="hidden">
+      <h2>¡Nivel superado, Agus! 🎉</h2>
+      <p>Puntaje final: <span id="score"></span>/30</p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué protocolo se utiliza para enviar correos electrónicos?", options: ["SMTP", "FTP", "HTTP"], answer: 0, explanation: "SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para el envío de correos electrónicos." },
+      { question: "¿Qué protocolo es responsable de la traducción de nombres de dominio?", options: ["DNS", "DHCP", "TCP"], answer: 0, explanation: "DNS traduce nombres de dominio como www.example.com en direcciones IP." },
+      { question: "¿Cuál de estos es un protocolo seguro para navegación web?", options: ["HTTPS", "HTTP", "FTP"], answer: 0, explanation: "HTTPS añade una capa de seguridad mediante cifrado SSL/TLS a HTTP." },
+      { question: "¿Qué hace el protocolo FTP?", options: ["Transfiere archivos", "Envía correos electrónicos", "Asigna direcciones IP"], answer: 0, explanation: "FTP (File Transfer Protocol) se utiliza para transferir archivos a través de una red." },
+      { question: "¿Qué significa SSL?", options: ["Secure Sockets Layer", "Security Server Link", "Software Security Level"], answer: 0, explanation: "SSL (Secure Sockets Layer) es un protocolo de cifrado para comunicaciones seguras." },
+      { question: "¿Qué protocolo reemplaza a SSL en la actualidad?", options: ["TLS", "FTP", "SMTP"], answer: 0, explanation: "TLS (Transport Layer Security) es la versión más moderna y segura que reemplaza a SSL." },
+      { question: "¿Qué protocolo se usa en redes inalámbricas seguras?", options: ["WPA2", "HTTP", "FTP"], answer: 0, explanation: "WPA2 (Wi-Fi Protected Access 2) es un estándar de seguridad para redes inalámbricas." },
+      { question: "¿Qué es un ataque de phishing?", options: ["Suplantación de identidad para robar datos", "Un virus que daña hardware", "Una actualización de seguridad"], answer: 0, explanation: "El phishing engaña a las personas para que entreguen información personal confidencial." },
+      { question: "¿Qué dispositivo ayuda a proteger una red de accesos no autorizados?", options: ["Firewall", "Switch", "Router"], answer: 0, explanation: "El firewall filtra y controla el tráfico para proteger contra accesos no autorizados." },
+      { question: "¿Qué capa OSI maneja la comunicación de extremo a extremo?", options: ["Transporte", "Red", "Física"], answer: 0, explanation: "La capa de transporte asegura la comunicación confiable de extremo a extremo." },
+      { question: "¿Qué protocolo utiliza el puerto 443?", options: ["HTTPS", "HTTP", "FTP"], answer: 0, explanation: "HTTPS usa el puerto 443 para la navegación web segura." },
+      { question: "¿Qué significa VPN?", options: ["Red Privada Virtual", "Verificación de Protocolo de Nombres", "Vinculación de Puertos de Nodo"], answer: 0, explanation: "Una VPN crea un túnel seguro a través de una red pública como Internet." },
+      { question: "¿Qué significa la sigla IPsec?", options: ["Internet Protocol Security", "Internet Password Secure", "Internal Protocol Section"], answer: 0, explanation: "IPsec es un conjunto de protocolos que aseguran comunicaciones IP cifradas." },
+      { question: "¿Cuál de estos NO es un método de autenticación?", options: ["Switching", "Contraseña", "Biometría"], answer: 0, explanation: "Switching no es un método de autenticación, es una técnica de redes." },
+      { question: "¿Qué es sniffing en redes?", options: ["Capturar tráfico de red", "Actualizar servidores", "Desfragmentar discos"], answer: 0, explanation: "Sniffing consiste en interceptar y analizar paquetes de datos en una red." },
+      { question: "¿Qué protocolo permite conexión remota segura?", options: ["SSH", "Telnet", "HTTP"], answer: 0, explanation: "SSH (Secure Shell) proporciona acceso remoto seguro a sistemas." },
+      { question: "¿Qué protocolo obsoleto debería evitarse para conexiones remotas?", options: ["Telnet", "SSH", "HTTPS"], answer: 0, explanation: "Telnet es inseguro porque transmite datos en texto plano." },
+      { question: "¿Qué es una zona desmilitarizada (DMZ) en redes?", options: ["Área intermedia entre red interna y externa", "Un servidor DNS", "Un tipo de firewall"], answer: 0, explanation: "Una DMZ es una subred que separa los servicios accesibles públicamente de la red interna segura." },
+      { question: "¿Qué protocolo resuelve la dirección MAC a partir de una IP?", options: ["ARP", "RARP", "ICMP"], answer: 0, explanation: "ARP (Address Resolution Protocol) se encarga de encontrar la dirección MAC correspondiente a una IP." },
+      { question: "¿Qué protocolo reporta errores en la entrega de paquetes?", options: ["ICMP", "TCP", "UDP"], answer: 0, explanation: "ICMP (Internet Control Message Protocol) informa errores y diagnósticos en la red." },
+      { question: "¿Qué herramienta usa ICMP para verificar conectividad?", options: ["Ping", "Traceroute", "FTP"], answer: 0, explanation: "Ping usa ICMP para comprobar la disponibilidad de otro dispositivo en red." },
+      { question: "¿Qué significa que un puerto esté 'abierto'?", options: ["Está disponible para aceptar conexiones", "Está dañado", "Está cifrado"], answer: 0, explanation: "Un puerto abierto permite que servicios específicos reciban conexiones entrantes." },
+      { question: "¿Qué protocolo asigna IP automáticamente?", options: ["DHCP", "DNS", "SMTP"], answer: 0, explanation: "DHCP (Dynamic Host Configuration Protocol) asigna IPs automáticamente a los dispositivos." },
+      { question: "¿Qué significa cifrado de extremo a extremo?", options: ["Que solo emisor y receptor pueden leer el contenido", "Que los datos viajan más rápido", "Que la red es inalámbrica"], answer: 0, explanation: "El cifrado de extremo a extremo garantiza que solo las partes involucradas puedan acceder al contenido." },
+      { question: "¿Qué es un exploit en seguridad informática?", options: ["Un software que aprovecha vulnerabilidades", "Un firewall avanzado", "Un programa antivirus"], answer: 0, explanation: "Un exploit es un programa o código que se aprovecha de una vulnerabilidad de seguridad." },
+      { question: "¿Qué significa HTTPS?", options: ["HTTP Secure", "HyperText Transfer Protocol Simple", "Hyper Transport System"], answer: 0, explanation: "HTTPS es la versión segura de HTTP usando cifrado TLS." },
+      { question: "¿Qué protocolo utiliza SSH para cifrado?", options: ["RSA", "FTP", "TCP"], answer: 0, explanation: "SSH puede usar RSA como método de cifrado para autenticar la conexión." },
+      { question: "¿Qué tipo de ataque satura un servicio para hacerlo inaccesible?", options: ["Ataque de denegación de servicio (DoS)", "Phishing", "Sniffing"], answer: 0, explanation: "Un ataque DoS intenta hacer que un servicio o red no esté disponible para usuarios legítimos." },
+      { question: "¿Qué protocolo permite conocer la ruta que siguen los paquetes?", options: ["Traceroute", "Ping", "FTP"], answer: 0, explanation: "Traceroute permite rastrear el camino que siguen los paquetes hasta su destino final." },
+      { question: "¿Qué elemento de seguridad ayuda a detectar accesos no autorizados?", options: ["Sistema de detección de intrusos (IDS)", "Switch", "Cable UTP"], answer: 0, explanation: "Un IDS analiza el tráfico en busca de patrones que indiquen accesos no autorizados o ataques." }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const endMessage = document.getElementById("end-message");
+    const scoreEl = document.getElementById("score");
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      const current = questions[currentQuestion];
+      questionEl.textContent = current.question;
+      choicesEl.innerHTML = "";
+
+      current.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => selectAnswer(index);
+        choicesEl.appendChild(button);
+      });
+    }
+
+    function selectAnswer(selected) {
+      const current = questions[currentQuestion];
+      if (selected === current.answer) {
+        feedbackEl.textContent = "✅ Correcto: " + current.explanation;
+        score++;
+      } else {
+        feedbackEl.textContent = "❌ Incorrecto: " + current.explanation;
+      }
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        setTimeout(() => {
+          feedbackEl.textContent = "";
+          showQuestion();
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          questionEl.classList.add("hidden");
+          choicesEl.classList.add("hidden");
+          feedbackEl.classList.add("hidden");
+          endMessage.classList.remove("hidden");
+          scoreEl.textContent = score;
+        }, 1500);
+      }
+    }
+
+    shuffleArray(questions);
+    showQuestion();
+  </script>
+</body>
+</html>
