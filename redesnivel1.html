@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desafío Redes - Nivel 1</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #334155;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #475569;
+    }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Desafío Redes</h1>
+    <h2>Nivel 1: El Origen de la Red</h2>
+    <div id="question-container">
+      <p class="question" id="question"></p>
+      <div class="choices" id="choices"></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+    <div id="end-message" class="hidden">
+      <h2>¡Nivel superado, Agus! 🎉</h2>
+      <p>Puntaje final: <span id="score"></span>/30</p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "¿Qué es una red de datos?", options: ["Un conjunto de dispositivos conectados que comparten recursos", "Una red social", "Un único dispositivo aislado"], answer: 0, explanation: "Una red de datos conecta dispositivos para compartir recursos y comunicarse." },
+      { question: "¿Qué modelo tiene 7 capas y ayuda a entender cómo se comunican los dispositivos?", options: ["Modelo OSI", "Modelo Internet", "Modelo Ethernet"], answer: 0, explanation: "El modelo OSI tiene 7 capas que explican cómo viajan los datos desde un dispositivo a otro." },
+      { question: "¿Cuál de estas topologías conecta todos los dispositivos a un solo punto central?", options: ["Estrella", "Anillo", "Malla"], answer: 0, explanation: "La topología en estrella conecta todos los dispositivos a un switch o hub central." },
+      { question: "¿Qué protocolo permite comunicación de extremo a extremo en Internet?", options: ["TCP/IP", "HTTP", "Ethernet"], answer: 0, explanation: "TCP/IP es el conjunto de protocolos base de Internet y permite la comunicación de extremo a extremo." },
+      { question: "¿Qué es Ethernet?", options: ["Una tecnología de red de área local (LAN)", "Una marca de routers", "Un tipo de cable de fibra óptica"], answer: 0, explanation: "Ethernet es la tecnología LAN más común que usamos para conectar computadoras en redes locales." },
+      { question: "¿Qué es una dirección IP?", options: ["Una etiqueta numérica que identifica un dispositivo en una red", "Una contraseña de red", "Una URL"], answer: 0, explanation: "Una dirección IP es un número único que identifica a un dispositivo en la red." },
+      { question: "¿Qué significa LAN?", options: ["Red de área local", "Red de largo alcance", "Red de acceso limitado"], answer: 0, explanation: "LAN significa red de área local, donde los dispositivos están conectados en una misma zona." },
+      { question: "¿Qué dispositivo permite interconectar múltiples redes?", options: ["Router", "Switch", "Hub"], answer: 0, explanation: "El router conecta distintas redes entre sí y enruta el tráfico." },
+      { question: "¿Qué función tiene un switch en una red?", options: ["Conecta dispositivos dentro de una misma red", "Conecta redes entre sí", "Sirve contenido web"], answer: 0, explanation: "El switch interconecta dispositivos dentro de la misma red LAN de forma eficiente." },
+      { question: "¿Cuál de estas opciones describe mejor un hub?", options: ["Un repetidor que transmite los datos a todos los puertos", "Un dispositivo inteligente que filtra tráfico", "Un cortafuegos"], answer: 0, explanation: "Un hub transmite todo el tráfico a todos los puertos sin filtrar, a diferencia del switch." },
+      { question: "¿Qué capa del modelo OSI es responsable del enrutamiento?", options: ["Capa de red", "Capa de enlace de datos", "Capa de presentación"], answer: 0, explanation: "La capa de red es responsable del direccionamiento y enrutamiento de datos." },
+      { question: "¿Qué hace el protocolo HTTP?", options: ["Permite la comunicación en la web", "Administra IPs dinámicas", "Detecta errores físicos"], answer: 0, explanation: "HTTP es el protocolo base para el acceso a páginas web." },
+      { question: "¿Qué significa WAN?", options: ["Red de área amplia", "Red de acceso inalámbrico", "Red de administración web"], answer: 0, explanation: "WAN (Wide Area Network) conecta redes a gran escala, como el Internet." },
+      { question: "¿Qué protocolo se usa para asignar direcciones IP automáticamente?", options: ["DHCP", "DNS", "HTTP"], answer: 0, explanation: "DHCP asigna direcciones IP de forma automática a los dispositivos en red." },
+      { question: "¿Qué hace el protocolo DNS?", options: ["Traduce nombres de dominio a direcciones IP", "Encripta datos", "Detecta ataques DDoS"], answer: 0, explanation: "DNS traduce nombres legibles como google.com a direcciones IP numéricas." },
+      { question: "¿Qué tipo de cable es común en redes LAN?", options: ["UTP", "Coaxial", "De fibra de carbono"], answer: 0, explanation: "El cable UTP es el más común en instalaciones de redes LAN por su facilidad y bajo costo." },
+      { question: "¿Qué es una dirección MAC?", options: ["Identificador único del hardware de red", "Un tipo de cable", "Un servidor de seguridad"], answer: 0, explanation: "La dirección MAC identifica de forma única la interfaz de red de un dispositivo." },
+      { question: "¿Qué dispositivo sirve como punto de acceso para redes inalámbricas?", options: ["Access Point", "Switch", "Servidor DNS"], answer: 0, explanation: "El Access Point permite que dispositivos inalámbricos se conecten a la red." },
+      { question: "¿Qué significa protocolo?", options: ["Conjunto de reglas que rigen la comunicación", "Tipo de virus", "Una contraseña cifrada"], answer: 0, explanation: "Un protocolo define las reglas para la transmisión de datos en una red." },
+      { question: "¿Cuál de los siguientes no es un protocolo de red?", options: ["JPEG", "FTP", "SMTP"], answer: 0, explanation: "JPEG es un formato de imagen, no un protocolo de red." },
+      { question: "¿Qué capa OSI se encarga del cifrado de datos?", options: ["Capa de presentación", "Capa de sesión", "Capa de transporte"], answer: 0, explanation: "La capa de presentación traduce, comprime y encripta los datos." },
+      { question: "¿Cuál es la principal función de un firewall?", options: ["Filtrar tráfico de red", "Acelerar la conexión", "Gestionar nombres de dominio"], answer: 0, explanation: "El firewall protege la red filtrando el tráfico entrante y saliente según reglas." },
+      { question: "¿Cuál de estos es un protocolo de transferencia de archivos?", options: ["FTP", "HTTP", "IP"], answer: 0, explanation: "FTP es el protocolo usado específicamente para transferir archivos entre sistemas." },
+      { question: "¿Qué diferencia a TCP de UDP?", options: ["TCP garantiza entrega, UDP no", "UDP es más seguro que TCP", "TCP solo se usa en redes locales"], answer: 0, explanation: "TCP garantiza entrega y orden, UDP es más rápido pero no fiable." },
+      { question: "¿Qué es un puerto en redes?", options: ["Un punto lógico para comunicar servicios en una red", "Una salida de energía", "Un tipo de conector físico"], answer: 0, explanation: "Un puerto en redes es un número que identifica servicios dentro de una IP." },
+      { question: "¿Cuál es la función del modelo OSI?", options: ["Establecer una guía para entender y diseñar redes", "Reemplazar a TCP/IP", "Asignar direcciones IP"], answer: 0, explanation: "El modelo OSI es una guía teórica para entender el proceso de comunicación en redes." },
+      { question: "¿Qué es un protocolo propietario?", options: ["Un protocolo desarrollado por una empresa y no abierto", "Un protocolo libre de uso público", "Una variante del modelo OSI"], answer: 0, explanation: "Protocolos propietarios son cerrados y creados por empresas, como AppleTalk." },
+      { question: "¿Qué capa del modelo OSI se comunica directamente con el usuario?", options: ["Capa de aplicación", "Capa de red", "Capa física"], answer: 0, explanation: "La capa de aplicación es la más cercana al usuario y gestiona la interfaz de red." },
+      { question: "¿Qué significa NIC en redes?", options: ["Tarjeta de interfaz de red", "Cable de red interno", "Nodo intermedio de conexión"], answer: 0, explanation: "NIC (Network Interface Card) es la tarjeta que conecta físicamente el dispositivo a la red." },
+      { question: "¿Qué capa OSI gestiona el control de errores y flujo?", options: ["Capa de transporte", "Capa de red", "Capa de enlace de datos"], answer: 0, explanation: "La capa de transporte se encarga del control de errores, flujo y segmentación de datos." }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const feedbackEl = document.getElementById("feedback");
+    const endMessage = document.getElementById("end-message");
+    const scoreEl = document.getElementById("score");
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+
+      // Mezcla las opciones antes de mostrarlas
+      const shuffledOptions = [...q.options];
+      shuffleArray(shuffledOptions);
+
+      choicesEl.innerHTML = "";
+      feedbackEl.textContent = "";
+
+      shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(idx, shuffledOptions, q);
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, shuffledOptions, q) {
+      const correctIndex = shuffledOptions.indexOf(q.options[q.answer]);
+
+      if (selected === correctIndex) {
+        score++;
+        feedbackEl.textContent = "✅ ¡Correcto! " + q.explanation;
+      } else {
+        feedbackEl.textContent = "❌ Incorrecto. " + q.explanation;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById("question-container").classList.add("hidden");
+          endMessage.classList.remove("hidden");
+          scoreEl.textContent = score;
+        }
+      }, 5000); // Pausa de 5 segundos
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
